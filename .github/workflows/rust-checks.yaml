@@ -1,0 +1,45 @@
+on:
+  pull_request:
+  push:
+    branches: ['main']
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Rust
+        uses: ./.github/actions/setup-rs
+        with:
+          components: rustfmt
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Rust
+        uses: ./.github/actions/setup-rs
+        with:
+          components: clippy
+      - name: Run clippy
+        run: cargo clippy -- -Dwarnings
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Rust
+        uses: ./.github/actions/setup-rs
+      - name: Run tests
+        run: cargo test

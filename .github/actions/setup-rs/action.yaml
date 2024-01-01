@@ -1,0 +1,26 @@
+name: "Setup Rust"
+description: "Setup Rust environment and enable to build incrementally"
+
+inputs:
+  components:
+    description: 'Used componets of rust, which will be given to rust-toolchain'
+    default: ''
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: ${{ inputs.components }}
+    - name: Cache cargo and build result
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo
+    - name: Restore timestamps
+      uses: chetan/git-restore-mtime-action@v2
