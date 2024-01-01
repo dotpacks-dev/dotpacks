@@ -18,7 +18,7 @@ pub trait DotPackage<Context>: Debug {
   // Return Some([`Self::Version`]) if the package is installed,
   // otherwise return None.
   //
-  //[`Self::Version`]: DotPackageVariant::Version
+  //[`Self::Version`]: DotPackage::Version
   async fn check(&self, context: &Context) -> Option<Self::Version>;
 
   // Return the version of package which should be installed.
