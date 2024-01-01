@@ -1,0 +1,7 @@
+debug/
+target/
+
+**/*.rs.bk
+
+# Cargo.lock should be ignore in library crates.
+Cargo.lock
