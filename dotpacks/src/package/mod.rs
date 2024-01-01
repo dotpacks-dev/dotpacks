@@ -1,32 +1,28 @@
 pub mod name;
+pub mod version;
 
-use futures::future::BoxFuture;
+use std::error::Error;
 
-use self::name::DotPackageName;
+use async_trait::async_trait;
 
-///
-///
-/// # Example
-/// ```no_run
-/// use dotpacks::package::DotPackage;
-/// use futures::FutureExt;
-/// use dotpacks::name;
-///
-/// type Ctx = ();
-/// fn example_package() -> DotPackage<Ctx> {
-///   DotPackage::<Ctx> {
-///     name: name!(example),
-///     install: |_: &()| async move {
-///       // your fancy install actions
-///     }.boxed()
-///   }
-/// }
-///
-/// ```
-#[derive(PartialEq, Eq, Debug, Clone)]
-pub struct DotPackage<Context> {
-  /// The name of the package.
-  /// This name is used to display the informations to console.
-  pub name: DotPackageName,
-  pub install: fn(&Context) -> BoxFuture<'static, ()>,
+use self::{name::DotPackageName, version::DotPackageVersion};
+
+#[async_trait]
+pub trait DotPackage<Context> {
+  type Version: DotPackageVersion;
+
+  /// The identifier of the package.
+  fn name(&self) -> DotPackageName;
+
+  // Return Some([`Self::Version`]) if the package is installed,
+  // otherwise return None.
+  //
+  //[`Self::Version`]: DotPackageVariant::Version
+  async fn check(&self, context: &Context) -> Option<Self::Version>;
+
+  // Return the version of package which should be installed.
+  async fn select_version(&self, context: &Context) -> Self::Version;
+
+  // Install the package with the version.
+  async fn install(&self, context: &Context, version: Self::Version) -> Result<(), Box<dyn Error>>;
 }
