@@ -1,4 +1,8 @@
+pub mod name;
+
 use futures::future::BoxFuture;
+
+use self::name::DotPackageName;
 
 ///
 ///
@@ -6,18 +10,23 @@ use futures::future::BoxFuture;
 /// ```no_run
 /// use dotpacks::package::DotPackage;
 /// use futures::FutureExt;
+/// use dotpacks::name;
 ///
-/// let _ = DotPackage::<()> {
-///   name: "example".into(),
-///   install: |_: &()| async move {
-///     println!("Hello, world!")
-///   }.boxed(),
-/// };
+/// type Ctx = ();
+/// fn example_package() -> DotPackage<Ctx> {
+///   DotPackage::<Ctx> {
+///     name: name!(example),
+///     install: |_: &()| async move {
+///       // your fancy install actions
+///     }.boxed()
+///   }
+/// }
+///
 /// ```
-#[derive(PartialEq, Eq, Debug, Clone, Hash)]
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub struct DotPackage<Context> {
   /// The name of the package.
   /// This name is used to display the informations to console.
-  pub name: String,
+  pub name: DotPackageName,
   pub install: fn(&Context) -> BoxFuture<'static, ()>,
 }
