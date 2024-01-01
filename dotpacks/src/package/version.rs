@@ -1,4 +1,5 @@
 use dyn_ord::DynEq;
+use std::fmt::Debug;
 
 /// The trait which the version returned by [`DotPackage`] should satisfy.
 ///
@@ -10,5 +11,5 @@ use dyn_ord::DynEq;
 /// ```
 /// But this feature(traits alias) is still unstable, so we implemented it manually.
 ///
-pub trait DotPackageVersion: DynEq + erased_serde::Serialize + Send + Sync {}
-impl<T: DynEq + erased_serde::Serialize + Send + Sync> DotPackageVersion for T {}
+pub trait DotPackageVersion: Debug + DynEq + erased_serde::Serialize + Send + Sync {}
+impl<T: Debug + DynEq + erased_serde::Serialize + Send + Sync> DotPackageVersion for T {}

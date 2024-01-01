@@ -2,13 +2,14 @@ pub mod name;
 pub mod version;
 
 use std::error::Error;
+use std::fmt::Debug;
 
 use async_trait::async_trait;
 
 use self::{name::DotPackageName, version::DotPackageVersion};
 
 #[async_trait]
-pub trait DotPackage<Context> {
+pub trait DotPackage<Context>: Debug {
   type Version: DotPackageVersion;
 
   /// The identifier of the package.
