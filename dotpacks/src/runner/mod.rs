@@ -1,4 +1,4 @@
-use crate::package::{version::DotPackageVersion, DotPackage};
+use crate::package::{version::DotPackageVersion, DotPackage, GenericDotPackage};
 
 #[derive(Debug)]
 pub struct DotpacksRunner<Context> {
@@ -13,7 +13,7 @@ pub struct DotpacksRunner<Context> {
 /// you can make your config with `Context`, and run with it.
 #[derive(Debug)]
 pub struct Dotpacks<Context> {
-  packages: Vec<Box<dyn DotPackage<Context, Version = dyn DotPackageVersion>>>,
+  packages: Vec<GenericDotPackage<Context>>,
 }
 
 impl<Context> Dotpacks<Context> {

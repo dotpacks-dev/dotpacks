@@ -7,7 +7,7 @@ use std::fmt::Debug;
 ///
 /// This trait has same meaning as the following:
 /// ```ignore
-/// trait DotPackageVersion = PartialEq + Eq + Serialize + DeserializeOwned + Send + Sync;
+/// trait DotPackageVersion = Debug + PartialEq + Serialize + Send + Sync;
 /// ```
 /// But this feature(traits alias) is still unstable, so we implemented it manually.
 ///
