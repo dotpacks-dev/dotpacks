@@ -8,8 +8,8 @@ use async_trait::async_trait;
 
 use self::{name::DotPackageName, version::DotPackageVersion};
 
-pub(crate) type DotPackagesVec<Context> =
-  Vec<Box<dyn DotPackage<Context, Version = dyn DotPackageVersion>>>;
+pub(crate) type GenericDotPackage<Context> =
+  Box<dyn DotPackage<Context, Version = dyn DotPackageVersion>>;
 
 #[async_trait]
 pub trait DotPackage<Context>: Debug {
@@ -19,7 +19,7 @@ pub trait DotPackage<Context>: Debug {
   fn name(&self) -> DotPackageName;
 
   /// The packages depends on this package.
-  fn deps(&self) -> DotPackagesVec<Context>;
+  fn deps(&self) -> Vec<GenericDotPackage<Context>>;
 
   // Return Some([`Self::Version`]) if the package is installed,
   // otherwise return None.
